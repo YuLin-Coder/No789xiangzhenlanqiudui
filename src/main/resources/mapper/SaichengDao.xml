@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.SaichengDao">
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.qd1_types as qd1Types
+        ,a.qd2_types as qd2Types
+        ,a.kaishi_time as kaishiTime
+        ,a.jieshu_time as jieshuTime
+        ,a.jieguo_content as jieguoContent
+    </sql>
+
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.SaichengView" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM Saicheng  a
+        <where>
+            <if test=" params.qd1Types != '' and params.qd1Types != null and params.qd1Types != 'null' ">
+                and a.qd1_types = #{params.qd1Types}
+            </if>
+            <if test=" params.qd2Types != '' and params.qd2Types != null and params.qd2Types != 'null' ">
+                and a.qd2_types = #{params.qd2Types}
+            </if>
+            <if test=" params.kaishiTimeStart != '' and params.kaishiTimeStart != null and params.kaishiTimeStart != 'null' ">
+                and a.kaishi_time &gt;= {params.kaishiTimeStart}
+            </if>
+            <if test=" params.kaishiTimeEnd != '' and params.kaishiTimeEnd != null and params.kaishiTimeEnd != 'null' ">
+                and a.kaishi_time &lt;= {params.kaishiTimeEnd}
+            </if>
+            <if test=" params.jieshuTimeStart != '' and params.jieshuTimeStart != null and params.jieshuTimeStart != 'null' ">
+                and a.jieshu_time &gt;= {params.jieshuTimeStart}
+            </if>
+            <if test=" params.jieshuTimeEnd != '' and params.jieshuTimeEnd != null and params.jieshuTimeEnd != 'null' ">
+                and a.jieshu_time &lt;= {params.jieshuTimeEnd}
+            </if>
+            <if test=" params.jieguoContent != '' and params.jieguoContent != null and params.jieguoContent != 'null' ">
+                and a.jieguo_content like CONCAT('%',#{params.jieguoContent},'%')
+            </if>
+        </where>
+        order by a.id desc
+    </select>
+
+</mapper>
